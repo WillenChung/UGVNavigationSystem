@@ -5,6 +5,18 @@ This is a UGV navigation system based on occupancy grid map in GPS-denied enviro
 ### 1.1 Ubuntu and ROS
 Ubuntu 64-bit 18.04 and ROS Melodic. [ROS Installation](http://wiki.ros.org/ROS/Installation)
 ### 1.2 Create a catkin workspace
-`sudo apt install ros-melodic-catkin`
-`mkdir -p ~/catkin_ws/src`
+```sh
+sudo apt install ros-melodic-catkin
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_init_workspace
+cd ~/catkin_ws/
+catkin_make
+
+echo "source ~/catkin_ws/devel/setup.bash" >>  ~/.bashrc
+source ~/.bashrc
+
+#check if success
+echo $ROS_PACKAGE_PATH
+```
 
