@@ -19,4 +19,11 @@ source ~/.bashrc
 #check if success
 echo $ROS_PACKAGE_PATH
 ```
-## 2. 
+## 2. Receive lidar data
+- install the dependencies in _[rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk)_
+- download via git
+```sh
+cd ~/catkin_ws/src
+git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
+```
+- compile 
