@@ -19,7 +19,7 @@ source ~/.bashrc
 #check if success
 echo $ROS_PACKAGE_PATH
 ```
-### ROS Package dependecies
+### 1.3 ROS Package dependecies
 ```sh
 sudo apt install ros-melodic-navigation
 ```
@@ -36,7 +36,24 @@ git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 `roslaunch rslidar_sdk start.launch`
 - open rviz, you can see the pointcloud in frame /rslidar
 
-## 3. Mapping
+## 3. LeGO-LOAM
+ - download via git
+```sh
+cd ~/catkin_ws/src
+git clone https://github.com/RobustFieldAutonomyLab/LeGO-LOAM.git
+```
+ - modify global parameters in _utility.h_
+ ```c++
+ extern const string pointCloudTopic = "/rslidar_points";
+ //RSHELIOS
+extern const int N_SCAN = 32;
+extern const int Horizon_SCAN = 1800;
+extern const float ang_res_x = 0.2;
+extern const float ang_res_y = 1.0;
+extern const float ang_bottom = 16;
+extern const int groundScanInd = 7;
+```
+## 4. Mapping
 _[Traversability Mapping](https://github.com/TixiaoShan/traversability_mapping)_
 
 
