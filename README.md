@@ -26,4 +26,8 @@ echo $ROS_PACKAGE_PATH
 cd ~/catkin_ws/src
 git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 ```
-- compile 
+- compile with ROS catkin tools following _[rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk)_
+- modify lidar_type: RSHELIOS in config.yaml
+- run
+`roslaunch rslidar_sdk start.launch`
+- open rviz, you can see the pointcloud in frame /rslidar
