@@ -19,6 +19,10 @@ source ~/.bashrc
 #check if success
 echo $ROS_PACKAGE_PATH
 ```
+### ROS Package dependecies
+```sh
+sudo apt install ros-melodic-navigation
+```
 ## 2. Receive lidar data
 - install the dependencies in _[rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk)_
 - download via git
@@ -31,3 +35,8 @@ git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 - run
 `roslaunch rslidar_sdk start.launch`
 - open rviz, you can see the pointcloud in frame /rslidar
+
+## 3. Mapping
+_[Traversability Mapping](https://github.com/TixiaoShan/traversability_mapping)_
+
+
