@@ -37,15 +37,15 @@ git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 - open rviz, you can see the pointcloud in frame /rslidar
 
 ## 3. LeGO-LOAM
- - download via git
+- download via git
 ```sh
 cd ~/catkin_ws/src
 git clone https://github.com/RobustFieldAutonomyLab/LeGO-LOAM.git
 ```
- - modify global parameters in _utility.h_
- ```c++
- extern const string pointCloudTopic = "/rslidar_points";
- //RSHELIOS
+- modify global parameters in _utility.h_
+```c++
+extern const string pointCloudTopic = "/rslidar_points";
+//RSHELIOS
 extern const int N_SCAN = 32;
 extern const int Horizon_SCAN = 1800;
 extern const float ang_res_x = 0.2;
@@ -54,7 +54,7 @@ extern const float ang_bottom = 16;
 extern const int groundScanInd = 7;
 ```
 ## 4. Mapping
- - download via git
+- download via git
 ```sh
 cd ~/catkin_ws/src
 git clone https://github.com/TixiaoShan/traversability_mapping.git
@@ -72,4 +72,5 @@ extern const int localMapLength = 300;
 ```
 - run the launch file
 `roslaunch traversability_mapping online.launch`
-- 
+- save grid map by map_server
+
