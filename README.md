@@ -54,6 +54,22 @@ extern const float ang_bottom = 16;
 extern const int groundScanInd = 7;
 ```
 ## 4. Mapping
-_[Traversability Mapping](https://github.com/TixiaoShan/traversability_mapping)_
-
-
+ - download via git
+```sh
+cd ~/catkin_ws/src
+git clone https://github.com/TixiaoShan/traversability_mapping.git
+```
+- modify global parameters in _utility.h_
+```c++
+// RS-Helios vertical and horizontal points per scan 
+extern const int N_SCAN = 32;
+extern const int Horizon_SCAN = 1800;
+// Robot Params
+extern const float robotRadius = 0.6;
+extern const float sensorHeight = 0.9;
+// length of the local occupancy grid map (meter)
+extern const int localMapLength = 300; 
+```
+- run the launch file
+`roslaunch traversability_mapping online.launch`
+- 
