@@ -72,5 +72,7 @@ extern const int localMapLength = 300;
 ```
 - run the launch file
 `roslaunch traversability_mapping online.launch`
-- save grid map by map_server
+- save grid map topic:=/occupancy_map_local name:=center_map2
+`rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local`
+
 
