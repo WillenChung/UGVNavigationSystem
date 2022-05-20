@@ -1,0 +1,28 @@
+<launch>
+    <!-- 设置恒定车速 -->
+    <arg name="car_speed" value="400"/>
+    <!-- 设置PID参数 -->
+    <arg name="P" value="10.0"/>
+    <arg name="I" value="0.12"/>
+    <arg name="D" value="0"/>
+    <arg name="IMax" value="50"/>
+    <arg name="PIDMax" value="150"/>
+    <arg name="I_Threshold" value="15"/>
+    <arg name="I_DeadArea" value="1"/>
+    <!-- 设置跟随路径话题名 -->
+    <!-- <arg name="follow_path_set" value="/stand_local_path"/> -->
+    <arg name="follow_path_set" value="/move_base/NavfnROS/plan"/>
+    
+    <node pkg="car_ctr" type="car_ctr_node" name="car_ctr_node" output="screen">
+        <param name="car_speed" value="$(arg car_speed)"/>
+        <param name="angular_p" value="$(arg P)"/>
+        <param name="angular_i" value="$(arg I)"/>
+        <param name="angular_d" value="$(arg D)"/>
+        <param name="angular_imax" value="$(arg IMax)"/>
+        <param name="angular_pidmax" value="$(arg PIDMax)"/>
+        <param name="angular_ithreshold" value="$(arg I_Threshold)"/>
+        <param name="angular_ideadarea" value="$(arg I_DeadArea)"/>
+        <param name="follow_path" value="$(arg follow_path_set)"/>
+    </node>
+    
+</launch>

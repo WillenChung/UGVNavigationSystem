@@ -1,0 +1,25 @@
+<launch>
+    <arg name="map" value="new_map_c.yaml" />
+    <!-- <arg name="map" value="center_map2.yaml" /> -->
+
+    <!-- 加载已建地图 -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find car_ctr)/maps/$(arg map)"/>
+
+    <!-- static tf -->
+    <!-- <node name="maptobase" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /base_link 50"/> -->
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <!-- <rosparam command="delete" ns="move_base" /> -->
+        <rosparam file="$(find car_ctr)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find car_ctr)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find car_ctr)/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find car_ctr)/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find car_ctr)/config/base_local_planner.yaml" command="load" />
+        <rosparam file="$(find car_ctr)/config/move_base_params.yaml" command="load" />
+        <rosparam file="$(find car_ctr)/config/navfn_global_planner_params.yaml" command="load" />
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" output="log" args="-d $(find car_ctr)/launch/include/move_base.rviz" />
+
+
+</launch>
