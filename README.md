@@ -109,6 +109,10 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 
 ## 2. Run
 ### 2.1 Mapping
+```sh
+cd $PATH_mapping.sh
+bash mapping.sh
+```
 1. publish msg:sensor_msgs/PointCloud2 in topic:/rslidar_points
 `roslaunch rslidar_sdk start.launch`
 2. run traversability_mapping
@@ -117,14 +121,9 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 4. save occupancy grid map
 `cd /home/willen/test_ws/src/car_ctr/maps/
 rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local`
-```sh
-cd $PATH_mapping.sh
-bash mapping.sh
-```
-
 ### 2.2 Run
 1. first, move car to the start point of mapping, then log in intranet via Easy Connect
-2. run 
+2. run .sh
 ```sh
 cd $PATH_run.sh
 bash run.sh
