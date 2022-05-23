@@ -117,6 +117,7 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 `cd /home/willen/test_ws/src/car_ctr/maps/
 rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local` 
 
+![new_map_c]([https://octodex.github.com/images/minion.png](https://github.com/WillenChung/UGVNavigationSystem/blob/main/car_ctr/maps/new_map_c.pgm)
 
 
 
