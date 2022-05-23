@@ -75,4 +75,34 @@ extern const int localMapLength = 300;
 - save grid map topic:=/occupancy_map_local name:=center_map2
 `rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local`
 
+## 5. Path planning and Control
+- download this repository via git
+```sh
+cd ~/catkin_ws/src
+git clone https://github.com/WillenChung/UGVNavigationSystem.git
+```
+- modify parameters in move_base.launch&car_ctr.launch
+```xml
+<!-- move_base.launch -->
+
+<!-- load map config file -->
+<arg name="map" value="new_map_c.yaml" />
+```
+```xml
+<!-- car_ctr.launch -->
+
+<!-- configure car speed 0-1000 -->
+<arg name="car_speed" value="400"/>
+<!-- configure PID params -->
+<arg name="P" value="10.0"/>
+<arg name="I" value="0.12"/>
+<arg name="D" value="0"/>
+<arg name="IMax" value="50"/>
+<arg name="PIDMax" value="150"/>
+<arg name="I_Threshold" value="15"/>
+<arg name="I_DeadArea" value="1"/>
+<!-- configure following path topic -->
+<arg name="follow_path_set" value="/move_base/NavfnROS/plan"/>
+```
+
 
