@@ -1,0 +1,11 @@
+<launch>
+    <!-- 解析GPS数据 话题/gnss_data发布经纬度值 -->
+    <node pkg="ros1_mqtt_interface" type="gps_pub.py" name="gps_parse" output="screen"/>
+
+    <!-- 订阅话题/gnss_data 通过mqtt发布话题/ros_interface_data给界面端 -->
+    <node pkg="ros1_mqtt_interface" type="mqttsend_rossub.py" name="car2mqtt" output="screen"/>
+
+    <!-- 界面发布话题/interface_ros_data 通过mqtt发布话题/interface_data给车端 -->
+    <!-- <node pkg="ros1_mqtt_interface" type="mqttget_rospub.py" name="mqtt2car" output="screen"/> -->
+
+</launch>

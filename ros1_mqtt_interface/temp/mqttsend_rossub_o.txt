@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+
+
+
+
+########################################################################
+####                接受ROS内部话题，使用mqtt发送给界面                ###
+########################################################################
+# 该例程将使用mqtt发布/ros_interface_data话题，将接收的ROS信息使用json格式发送给界面
+import rospy
+import message_filters
+import socket
+import time
+import sys
+from std_msgs.msg import String
+######## MQTT的有关引用 #############
+import paho.mqtt.client as mqtt
+import json
+import random
+
+
+
+
+######################################################################
+######################################################################
+###################### MQTT连接服务器端口和IP #########################
+#MQTTHOST = '113.54.154.210'  #icv外部IP
+MQTTHOST = '192.168.1.123'  #icv内部IP
+#MQTTHOST = 'localhost'  #本地IP
+#MQTTPORT = 9999   #icv外部端口
+MQTTPORT = 1883   #icv内部端口
+
+######################### MQTT声明用户端名称 ##############################
+mqttClient = mqtt.Client(client_id="RosToInterface_001")
+
+######################### 连接MQTT服务器 ##############################
+def on_mqtt_connect():
+	mqttClient.connect(MQTTHOST, MQTTPORT, 60)
+	mqttClient.loop_start()
+	
+######################### MQTT_pub消息 ##############################
+def on_publish(topic, payload, qos):
+	mqttClient.publish(topic, payload, qos)
+
+
+
+
+
+
+
+######################################################################
+######################################################################
+############################# ROSsub回调函数 ###################
+def ros1_dataCallback(data1, data2):
+	########## 每次ros收到消息，mqtt发布消息 #############
+	object = {
+	"car_speed" : data1.data,
+	"plane_speed" : data2.data,
+	}
+	on_publish('/ros_interface_data',json.dumps(object),0)
+	print('matt send /ros_interface_data: '+str(object))
+	rospy.loginfo("Subcribe ros_interface_data:   car_speed:  %s       plane_speed:  %s" , data1.data, data2.data)
+	
+########################## ROSsub ##############################
+def ros1_subscriber():
+	#ROS节点初始化
+	rospy.init_node('ros1_subscriber', anonymous=True)
+	##同时订阅/car_speed和/plane_speed 两个话题，并利用message_filters实现话题同步，共同调用ros1_datacallback
+	t1 = message_filters.Subscriber("/car_speed", String,ros1_dataCallback)
+	t2 = message_filters.Subscriber("/plane_speed", String,ros1_dataCallback)
+	ts = message_filters.ApproximateTimeSynchronizer([t1, t2], 10, 1, allow_headerless=True)
+	ts.registerCallback(ros1_dataCallback)
+
+	# 循环等待回调函数
+	rospy.spin()
+
+
+if __name__ == '__main__':
+	on_mqtt_connect()
+	ros1_subscriber()
+
+
+
+
+
+
+
+
+
+
