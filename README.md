@@ -104,5 +104,19 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 <!-- configure following path topic -->
 <arg name="follow_path_set" value="/move_base/NavfnROS/plan"/>
 ```
+## 6. Communication with remote
+
+## 7. Run
+### 7.1 Mapping
+1. publish msg:sensor_msgs/PointCloud2 in topic:/rslidar_points
+`roslaunch rslidar_sdk start.launch`
+2. run traversability_mapping
+`roslaunch traversability_mapping online.launch`
+3. move car around the environment
+4. save occupancy grid map
+`cd /home/willen/test_ws/src/car_ctr/maps/
+rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local` 
+
+
 
 
