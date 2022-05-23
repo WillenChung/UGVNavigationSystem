@@ -2,9 +2,10 @@
 This is a UGV navigation system based on occupancy grid map in GPS-denied environments. We use open-source mapping algorithm _[Traversability Mapping](https://github.com/TixiaoShan/traversability_mapping)_ to build the environment map first and use _map_server_ ROS package to save the map to disk. we then back to the start point of mapping algorithm. based on the preliminary map model, once there is a goal point to send, the UGV will launch towards the target until it reachs the destination. We use _[LEGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM)_ to locate the UGV, use _[ROS Navigation Stack](https://wiki.ros.org/navigation)_ to find optimal path and track the  generated trajectory and use _mqtt_ to communicate with remote terminals.
 
 ## 1. Prerequisite
-### 1.1 Ubuntu and ROS
+### 1.1 first do
+Ubuntu and ROS
 Ubuntu 64-bit 18.04 and ROS Melodic. [ROS Installation](http://wiki.ros.org/ROS/Installation)
-### 1.2 Create a catkin workspace
+Create a catkin workspace
 ```sh
 sudo apt install ros-melodic-catkin
 mkdir -p ~/catkin_ws/src
@@ -19,11 +20,11 @@ source ~/.bashrc
 #check if success
 echo $ROS_PACKAGE_PATH
 ```
-### 1.3 ROS Package dependecies
+ROS Package dependecies
 ```sh
 sudo apt install ros-melodic-navigation
 ```
-## 2. Receive lidar data
+### 1.2 Receive lidar data
 - install the dependencies in _[rslidar_sdk](https://github.com/RoboSense-LiDAR/rslidar_sdk)_
 - download via git
 ```sh
@@ -36,7 +37,7 @@ git clone https://github.com/RoboSense-LiDAR/rslidar_sdk.git
 `roslaunch rslidar_sdk start.launch`
 - open rviz, you can see the pointcloud in frame /rslidar
 
-## 3. LeGO-LOAM
+### 1.3 LeGO-LOAM
 - download via git
 ```sh
 cd ~/catkin_ws/src
@@ -53,7 +54,7 @@ extern const float ang_res_y = 1.0;
 extern const float ang_bottom = 16;
 extern const int groundScanInd = 7;
 ```
-## 4. Mapping
+### 1.4 Mapping
 - download via git
 ```sh
 cd ~/catkin_ws/src
@@ -75,7 +76,7 @@ extern const int localMapLength = 300;
 - save grid map topic:=/occupancy_map_local name:=center_map2
 `rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local`
 
-## 5. Path planning and Control
+### 1.5 Path planning and Control
 - download this repository via git
 ```sh
 cd ~/catkin_ws/src
@@ -104,10 +105,10 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 <!-- configure following path topic -->
 <arg name="follow_path_set" value="/move_base/NavfnROS/plan"/>
 ```
-## 6. Communication with remote
+### 1.6 Communication with remote
 
-## 7. Run
-### 7.1 Mapping
+## 2. Run
+### 2.1 Mapping
 1. publish msg:sensor_msgs/PointCloud2 in topic:/rslidar_points
 `roslaunch rslidar_sdk start.launch`
 2. run traversability_mapping
@@ -115,9 +116,21 @@ git clone https://github.com/WillenChung/UGVNavigationSystem.git
 3. move car around the environment
 4. save occupancy grid map
 `cd /home/willen/test_ws/src/car_ctr/maps/
-rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local` 
+rosrun map_server map_saver  -f center_map2 map:=/occupancy_map_local`
+```sh
+cd $PATH_mapping.sh
+bash mapping.sh
+```
 
-![new_map_c]([https://octodex.github.com/images/minion.png](https://github.com/WillenChung/UGVNavigationSystem/blob/main/car_ctr/maps/new_map_c.pgm)
+### 2.2 Run
+1. first, move car to the start point of mapping, then log in intranet via Easy Connect
+2. run 
+```sh
+cd $PATH_run.sh
+bash run.sh
+```
+3. specify goal point in rviz 
+
 
 
 
