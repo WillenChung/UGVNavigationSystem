@@ -1,28 +1,25 @@
 # global_costmap:
 #   global_frame: map
 #   robot_base_frame: base_link
-#   update_frequency: 5.0
-#   publish_frequency: 5.0 
+
+#   update_frequency: 2.0
+#   publish_frequency: 10.0
+#   transform_tolerance: 0.5
+#   track_unknown_space: true
+#   rolling_window: true
+
 #   static_map: true
-#   rolling_window: false
-#   resolution: 0.1 
-#   transform_tolerance: 1.5
-#   inflation_radius: 10.0
-#   map_type: costmap
-#   plugins:
-#     - {name: static_layer, type: "costmap_2d::StaticLayer"}
-#     - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
-#     - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 
 
 global_costmap:
   global_frame: map
   robot_base_frame: base_link
-
-  update_frequency: 2.0
-  publish_frequency: 10.0
-  transform_tolerance: 0.5
-  track_unknown_space: true
-
+  update_frequency: 0.5
   static_map: true
+  rolling_window: false
+  transform_tolerance: 1.DS0
+  plugins:
+    - {name: static_layer,    type: "costmap_2d::StaticLayer"}
+    # - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
+    - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
  

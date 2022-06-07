@@ -87,13 +87,21 @@ void Car_Ctr::speed_set(int stright_vel, int omega){
 
 //底层控制，将控制指令通过串口发送给底盘
 void Car_Ctr::car_ctr_timer_cb(const ros::TimerEvent& event){
-    //tempErr0、tempErr1互为正负、和为2Pi
+    std::string driver_data = "!M " + std::to_string(0.0) + ' ' + std::to_string(0.0)+ '\r';
+    //tempErr0、tempErr1互为正负、绝对值和为2Pi
     float tempErr0 = state.target_yaw - state.real_yaw;
     float tempErr1 = tempErr0 - 2 * M_PI * SIGN(tempErr0);
     // ROS_INFO("tempErr0: %.2f, tempErr1: %.2f", tempErr0, tempErr1);
     float target_yaw_rate = pid_yaw->Run(- 180.0 / M_PI * (abs(tempErr0)>abs(tempErr1)?tempErr1:tempErr0));
-    // ROS_INFO("target_yaw: %.2f, real_yaw: %.2f, yaw_rate: %.2f", state.target_yaw * 180.0 / M_PI, state.real_yaw * 180.0 / M_PI, target_yaw_rate);
-    std::string driver_data = "!M " + std::to_string(-state.target_vel) + ' ' + std::to_string(target_yaw_rate)+ '\r';
+    
+    // //当需要掉头，停止平移；不需要掉头时，边旋转边平移
+    if((abs(tempErr0)>abs(tempErr1)?tempErr1:tempErr0) > 0.25*M_PI){
+        driver_data = "!M " + std::to_string(0.0) + ' ' + std::to_string(target_yaw_rate)+ '\r';   
+    }else{
+        // ROS_INFO("target_yaw: %.2f, real_yaw: %.2f, yaw_rate: %.2f", state.target_yaw * 180.0 / M_PI, state.real_yaw * 180.0 / M_PI, target_yaw_rate);
+        driver_data = "!M " + std::to_string(-state.target_vel) + ' ' + std::to_string(target_yaw_rate)+ '\r';
+    }
+    // driver_data = "!M " + std::to_string(-state.target_vel) + ' ' + std::to_string(target_yaw_rate)+ '\r';
     if(state.if_odom_ready && !reach_flag) ser.write(driver_data);
 }
 
@@ -137,23 +145,23 @@ void Car_Ctr::upper_ctr_timer2_cb(const ros::TimerEvent& event){
     // std::cout << goal_x << " " << goal_y << " " << if_have_goal << std::endl;
     float target_yaw;
     float dist;
-    //std::cout << reach_flag << std::endl;
+    //有目标点，没到达
     if(if_have_goal){
         std::cout << "next_x: " << planning_path.poses[20].pose.position.x << " next_y: " << 
             planning_path.poses[20].pose.position.y << " car_x: " << car_x << " car_y: " << 
             car_y << " goal_x: " << goal_x << " goal_y: " << goal_y <<  
             " if_have_goal: " << if_have_goal << " reach_flag: " << reach_flag <<std::endl;
         target_yaw= atan2(planning_path.poses[20].pose.position.y - car_y, planning_path.poses[20].pose.position.x - car_x);
-
         //线速度始终300，将目标角度发给控制接口
         speed_set(_car_speed_, target_yaw*180.0/M_PI);
+        
     }
 
     dist = sqrt(pow(goal_y - car_y,2)+pow(goal_x - car_x,2));
 
-    if(dist < 1.0){
+    if(dist < 1.0){        
         reach_flag = true;
-        if_have_goal = false;
+        // if_have_goal = false;
     } 
 }   
 
@@ -206,6 +214,7 @@ void Car_Ctr::_legoloamCallback(const nav_msgs::Odometry::ConstPtr& msg){
 
 void Car_Ctr::_pathCallback(const nav_msgs::Path::ConstPtr& msg){
     planning_path = *msg;
+    // std::cout << planning_path.poses[20].pose.position.x << std::endl;
     // path_x.clear();
     // path_y.clear();
     //receive_path_flag = true;
@@ -239,12 +248,29 @@ void Car_Ctr::_pathCallback(const nav_msgs::Path::ConstPtr& msg){
 }
 
 void Car_Ctr::_goalCallback(const geometry_msgs::PoseStamped::ConstPtr& msg){
-    // if(goal_x != msg->pose.position.x && goal_y != msg->pose.position.y){
-    //     reach_flag = false;
-    // }
-    goal_x = msg->pose.position.x;
-    goal_y = msg->pose.position.y; 
-    if_have_goal = true;
-    reach_flag = false;
-    // std::cout << "goal_x: " << goal_x << " goal_y: " << goal_y << std::endl;
+    //只发一次目标点消息
+    // goal_x = msg->pose.position.x;
+    // goal_y = msg->pose.position.y; 
+    // if_have_goal = true;
+    // reach_flag = false;
+
+    //一直发目标点消息
+    if(msg->pose.position.x != 0 && msg->pose.position.y != 0){
+        if(msg->pose.position.x != goal_x || msg->pose.position.y != goal_y){
+            goal_x = msg->pose.position.x;
+            goal_y = msg->pose.position.y;
+            reach_flag = false;
+        }
+        if_have_goal = true;
+    }else{
+        // 0 0 无目标
+        if_have_goal = false;
+    }
+
+
+
+
+    
+
+
 }
